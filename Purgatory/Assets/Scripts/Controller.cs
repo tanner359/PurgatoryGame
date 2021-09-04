@@ -7,11 +7,13 @@ using UnityEngine.InputSystem;
 public class Controller : MonoBehaviour
 {
     public float speed = 1f;
+    [Range(0f, 1f)]
+    public float deadZone = 0.00f;
 
     private Player_Inputs input;
     private Rigidbody2D rb;
 
-    private Vector2 direction;
+    public Vector2 direction;
 
     public void OnEnable()
     {
@@ -31,7 +33,32 @@ public class Controller : MonoBehaviour
 
     private void Movement(InputAction.CallbackContext obj)
     {
-        direction = obj.ReadValue<Vector2>();
+        float xValue = obj.ReadValue<Vector2>().x;
+        float yValue = obj.ReadValue<Vector2>().y;
+
+        if (xValue < -deadZone && transform.localScale.x > 0)
+        {
+            Flip();
+        }
+        else if (xValue > deadZone && transform.localScale.x < 0)
+        {
+            Flip();
+        }
+
+        if (xValue > deadZone || xValue < -deadZone || yValue > deadZone || yValue < -deadZone) 
+        {
+            direction = obj.ReadValue<Vector2>();
+        }
+        else
+        {
+            direction = Vector2.zero;
+        }
+        
+    }
+
+    private void Flip()
+    {
+        transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
     }
 
     private void FixedUpdate()
