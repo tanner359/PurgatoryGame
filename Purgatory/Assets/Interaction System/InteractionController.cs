@@ -7,6 +7,8 @@ public class InteractionController : MonoBehaviour
 {
     Player_Inputs inputs;
 
+    public Controller controller;
+
     #region INTERACTIONS
     public GameObject closestItem;
     [Header("Interaction Settings")]
@@ -26,7 +28,6 @@ public class InteractionController : MonoBehaviour
         inputs.Player.Interact.performed += Interact;
         inputs.Player.Enable();
     }
-
     private void Update()
     {
         ScanInteractArea();
@@ -51,7 +52,7 @@ public class InteractionController : MonoBehaviour
     #region Functions
     public void ScanInteractArea() // searching for items to interact with
     {
-        Collider2D[] objects = Physics2D.OverlapCircleAll(transform.position, interactionRange);
+        Collider2D[] objects = Physics2D.OverlapCircleAll(controller.currentPlayer.transform.position, interactionRange);
         if (objects.Length > 0)
         {
             List<GameObject> interactables = new List<GameObject>(); // objects that the system found that have ID's
@@ -65,7 +66,7 @@ public class InteractionController : MonoBehaviour
             }
             if (interactables.Count > 0) // if the system found any interactable items
             {
-                closestItem = GetClosestItem(transform.position, interactables); // find the closest item to the player
+                closestItem = GetClosestItem(controller.currentPlayer.transform.position, interactables); // find the closest item to the player
                 InteractionID id = closestItem.GetComponent<InteractionID>(); //get the ID
                 DisplayInteractText(id.textPosition, id.InteractText); //display the interaction prompt on that item
             }
@@ -108,7 +109,7 @@ public class InteractionController : MonoBehaviour
         if (showRange)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, interactionRange);
+            Gizmos.DrawWireSphere(controller.currentPlayer.transform.position, interactionRange);
         }
     }
     #endregion

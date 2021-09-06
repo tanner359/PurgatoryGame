@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - NPC
+  - Notifications
   layers:
   - Default
   - TransparentFX
@@ -14,7 +15,7 @@ TagManager:
   - UI
   - Player
   - NPC
-  - 
+  - Background
   - 
   - 
   - 
@@ -42,6 +43,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Effects
+    uniqueID: 3457292381
+    locked: 0
   - name: Players
     uniqueID: 3991139293
+    locked: 0
+  - name: UI
+    uniqueID: 2056010415
     locked: 0

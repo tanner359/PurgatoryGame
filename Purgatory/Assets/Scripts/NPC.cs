@@ -7,15 +7,32 @@ public class NPC : MonoBehaviour
     public Material material;
 
 
+    private void Start()
+    {
+        
+    }
+
     private void OnMouseEnter()
     {
-        Debug.Log("Mouse over something");
-        ToggleOutline(true);
+        if (Controller.isTargeting && enabled){ ToggleOutline(true); }
     }
 
     private void OnMouseExit()
     {
-        ToggleOutline(false);
+        if (Controller.isTargeting && enabled) { ToggleOutline(false); }
+    }
+
+    private void OnMouseDown()
+    {
+        if (Controller.isTargeting) 
+        {
+            if(Controller.instance.revolver.bulletCount > 0)
+            {
+                Controller.instance.SwitchPlayer(gameObject);
+                ToggleOutline(false);
+                enabled = false;
+            }          
+        }
     }
 
     public void ToggleOutline(bool state)
