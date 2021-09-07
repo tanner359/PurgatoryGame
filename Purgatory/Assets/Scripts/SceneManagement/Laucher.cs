@@ -7,7 +7,7 @@ public static class Laucher
 {  
     public static void LoadScene(int index)
     {
-        SceneManager.LoadScene(index);
+        SceneManager.LoadScene(index);        
     }
 
     public static void LoadScene(string sceneName)

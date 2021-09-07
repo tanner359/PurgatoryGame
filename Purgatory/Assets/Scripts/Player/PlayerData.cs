@@ -5,10 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public class PlayerData
 {
+    public string characterID;
     public int bulletCount;
 
-    public PlayerData(Revolver revolver)
+    public PlayerData(Player player, Revolver revolver)
     {
         bulletCount = revolver.bulletCount;
+        characterID = player.currentPlayer.GetComponent<CharacterID>().ID;
     }
 }

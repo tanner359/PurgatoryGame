@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Controller : MonoBehaviour
+public class Player : MonoBehaviour
 {
-    public static Controller instance;
+    public static Player instance;
 
     public GameObject currentPlayer;
 
@@ -48,21 +48,21 @@ public class Controller : MonoBehaviour
         input.Player.SwitchDimension.performed += InitiateDimensionTravel;
         input.Player.Enable();
 
-        CameraMaster.instance.SetPlayerCamTarget(currentPlayer.transform);
+        LoadPlayer();
     }
 
     private void Start()
     {
-        LoadPlayer();
-
         UpdateControllerData();
+
+        CameraMaster.instance.SetPlayerCamTarget(currentPlayer.transform);
     }
 
     #region Saving + Loading
 
     public void SavePlayer()
     {
-        PlayerData data = new PlayerData(revolver);
+        PlayerData data = new PlayerData(this, revolver);
         SaveSystem.SavePlayerData(data);
     }
 
@@ -70,7 +70,20 @@ public class Controller : MonoBehaviour
     {
         PlayerData data = SaveSystem.LoadPlayerData();
         if(data == null) { return; }
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player)
+        {
+            Destroy(player);
+        }
+
         revolver.bulletCount = data.bulletCount;
+        CharacterDatabase characterDatabase = Resources.Load<CharacterDatabase>("Data/Character Database");
+        GameObject character = characterDatabase.GetCharacter(data.characterID);
+        GameObject GO = Instantiate(character, Vector2.zero, Quaternion.identity, GameObject.Find("Characters").transform);
+        GO.GetComponent<NPC>().enabled = false;
+        GO.tag = "Player";
+        currentPlayer = GO;
     }
 
 
@@ -79,7 +92,9 @@ public class Controller : MonoBehaviour
     public void SwitchPlayer(GameObject player)
     {
         currentPlayer.GetComponent<NPC>().enabled = true;
+        currentPlayer.tag = "NPC";
         currentPlayer = player;
+        currentPlayer.tag = "Player";
         UpdateControllerData();
         CameraMaster.instance.SetPlayerCamTarget(player.transform);
         Cursor.SetCursor(default, default, CursorMode.Auto);
@@ -101,12 +116,14 @@ public class Controller : MonoBehaviour
     {
         revolver.bulletCount--;
         SavePlayer();
+        SceneController.instance.SaveScene();
         Laucher.LoadScene("Purgatory");
     }
 
     public void LaunchLiving()
     {
         SavePlayer();
+        SceneController.instance.SaveScene();
         Laucher.LoadScene("Living Realm");
     }
 

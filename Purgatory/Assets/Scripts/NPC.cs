@@ -14,21 +14,21 @@ public class NPC : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        if (Controller.isTargeting && enabled){ ToggleOutline(true); }
+        if (Player.isTargeting && enabled){ ToggleOutline(true); }
     }
 
     private void OnMouseExit()
     {
-        if (Controller.isTargeting && enabled) { ToggleOutline(false); }
+        if (Player.isTargeting && enabled) { ToggleOutline(false); }
     }
 
     private void OnMouseDown()
     {
-        if (Controller.isTargeting) 
+        if (Player.isTargeting) 
         {
-            if(Controller.instance.revolver.bulletCount > 0)
+            if(Player.instance.revolver.bulletCount > 0)
             {
-                Controller.instance.SwitchPlayer(gameObject);
+                Player.instance.SwitchPlayer(gameObject);
                 ToggleOutline(false);
                 enabled = false;
             }          
