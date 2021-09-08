@@ -46,9 +46,9 @@ public class SceneController : MonoBehaviour
         return IDs;
     }
 
-    public float[] GetActiveNPCPositions()
+    public Vector3[] GetActiveNPCPositions()
     {
-        float[] positions = new float[GameObject.FindGameObjectsWithTag("NPC").Length * 3];
+        Vector3[] positions = new Vector3[GameObject.FindGameObjectsWithTag("NPC").Length];
         int k = 0;
 
         for (int i = 0; i < ActiveCharacters.childCount; i++)
@@ -56,11 +56,8 @@ public class SceneController : MonoBehaviour
             Transform character = ActiveCharacters.GetChild(i);
             if (character.CompareTag("NPC"))
             {
-                positions[k] = character.position.x;
-                positions[k + 1] = character.position.y;
-                positions[k + 2] = character.position.z;
-
-                k += 3;
+                positions[k] = character.position;
+                k++;
             }
         }
         return positions;
@@ -90,10 +87,10 @@ public class SceneController : MonoBehaviour
 
             CharacterDatabase characterDatabase = Resources.Load<CharacterDatabase>("Data/Character Database");
             int k = 0;
-            for (int i = 0; i < data.active_NPCs.Length; i++)
+            for (int i = 0; i < data.NPCData.Length; i++)
             {
-                GameObject character = characterDatabase.GetCharacter(data.active_NPCs[i]);
-                Vector3 position = new Vector3(data.positions[k], data.positions[k + 1], data.positions[k + 2]);
+                GameObject character = characterDatabase.GetCharacter(data.NPCData[i].ID);
+                Vector3 position = data.NPCData[i].GetPosition();
                 Instantiate(character, position, Quaternion.identity, ActiveCharacters);
                 k += 3;
             }
