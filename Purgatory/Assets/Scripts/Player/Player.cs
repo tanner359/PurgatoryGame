@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -71,6 +72,12 @@ public class Player : MonoBehaviour
         PlayerData data = SaveSystem.LoadPlayerData();
         if(data == null) { return; }
 
+        if(data.currentScene != SceneManager.GetActiveScene().name)
+        {
+            SceneManager.LoadScene(data.currentScene);
+            return;
+        }
+
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player)
         {
@@ -80,7 +87,7 @@ public class Player : MonoBehaviour
         revolver.bulletCount = data.bulletCount;
         CharacterDatabase characterDatabase = Resources.Load<CharacterDatabase>("Data/Character Database");
         GameObject character = characterDatabase.GetCharacter(data.characterID);
-        GameObject GO = Instantiate(character, Vector2.zero, Quaternion.identity, GameObject.Find("Characters").transform);
+        GameObject GO = Instantiate(character, data.GetPosition(), Quaternion.identity, GameObject.Find("Characters").transform);
         GO.GetComponent<NPC>().enabled = false;
         GO.tag = "Player";
         currentPlayer = GO;
@@ -102,6 +109,7 @@ public class Player : MonoBehaviour
         Time.timeScale = 1f;
         revolver.bulletCount--;
         SavePlayer();
+        SceneController.instance.SaveScene();
     }
     public void UpdateControllerData()
     {

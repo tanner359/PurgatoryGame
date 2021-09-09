@@ -30,7 +30,6 @@ public class SceneController : MonoBehaviour
     public string[] GetActiveNPCs()
     {
         string[] IDs = new string[GameObject.FindGameObjectsWithTag("NPC").Length];
-        Debug.Log("NPC count:" + GameObject.FindGameObjectsWithTag("NPC").Length);
 
         int k = 0;
         for(int i = 0; i < ActiveCharacters.childCount; i++)
@@ -74,7 +73,7 @@ public class SceneController : MonoBehaviour
     {
         SceneData data = SaveSystem.LoadSceneData(SceneManager.GetActiveScene().name);
 
-        if (data != null)
+        if (data != null && data.NPCData != null)
         {
             for (int i = 0; i < ActiveCharacters.childCount; i++)
             {
