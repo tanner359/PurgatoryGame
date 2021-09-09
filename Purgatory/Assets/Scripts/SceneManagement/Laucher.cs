@@ -15,11 +15,6 @@ public static class Laucher
         SceneManager.LoadScene(sceneName);
     }
 
-    public static void LoadPurgatory()
-    {
-        SceneManager.LoadScene("Purgatory");
-    }
-
     public static void CloseApplication()
     {
         Application.Quit();

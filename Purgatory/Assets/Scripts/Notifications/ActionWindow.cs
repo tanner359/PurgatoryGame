@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class Notification : MonoBehaviour
+public class ActionWindow : MonoBehaviour
 {
     public delegate void ButtonFunction();
 

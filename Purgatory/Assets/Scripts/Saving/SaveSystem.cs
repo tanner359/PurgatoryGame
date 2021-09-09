@@ -13,6 +13,8 @@ public static class SaveSystem
 
         formatter.Serialize(stream, data);
         stream.Close();
+
+        Debug.Log("player data was successfully saved at " + path);
     }
     public static PlayerData LoadPlayerData()
     {

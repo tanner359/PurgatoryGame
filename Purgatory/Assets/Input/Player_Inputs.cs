@@ -57,6 +57,14 @@ public class @Player_Inputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""27d856ba-7bff-484a-a039-3e50be45dc50"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -301,6 +309,28 @@ public class @Player_Inputs : IInputActionCollection, IDisposable
                     ""action"": ""Switch Dimension"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b824282c-07fb-4393-923e-fd0a8018ddbf"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ea09f607-9b11-422c-8ef3-ba65eceb2e76"",
+                    ""path"": ""<XInputController>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Xbox Controller"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -325,6 +355,7 @@ public class @Player_Inputs : IInputActionCollection, IDisposable
         m_Player_Confirm = m_Player.FindAction("Confirm", throwIfNotFound: true);
         m_Player_TargetingMode = m_Player.FindAction("Targeting Mode", throwIfNotFound: true);
         m_Player_SwitchDimension = m_Player.FindAction("Switch Dimension", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -379,6 +410,7 @@ public class @Player_Inputs : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Confirm;
     private readonly InputAction m_Player_TargetingMode;
     private readonly InputAction m_Player_SwitchDimension;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @Player_Inputs m_Wrapper;
@@ -388,6 +420,7 @@ public class @Player_Inputs : IInputActionCollection, IDisposable
         public InputAction @Confirm => m_Wrapper.m_Player_Confirm;
         public InputAction @TargetingMode => m_Wrapper.m_Player_TargetingMode;
         public InputAction @SwitchDimension => m_Wrapper.m_Player_SwitchDimension;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -412,6 +445,9 @@ public class @Player_Inputs : IInputActionCollection, IDisposable
                 @SwitchDimension.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchDimension;
                 @SwitchDimension.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchDimension;
                 @SwitchDimension.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchDimension;
+                @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -431,6 +467,9 @@ public class @Player_Inputs : IInputActionCollection, IDisposable
                 @SwitchDimension.started += instance.OnSwitchDimension;
                 @SwitchDimension.performed += instance.OnSwitchDimension;
                 @SwitchDimension.canceled += instance.OnSwitchDimension;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -460,5 +499,6 @@ public class @Player_Inputs : IInputActionCollection, IDisposable
         void OnConfirm(InputAction.CallbackContext context);
         void OnTargetingMode(InputAction.CallbackContext context);
         void OnSwitchDimension(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

@@ -18,9 +18,9 @@ public class PlayerData
         characterID = player.currentPlayer.GetComponent<CharacterID>().ID;
 
         position = new float[3];
-        position[0] = player.transform.position.x;
-        position[1] = player.transform.position.y;
-        position[2] = player.transform.position.z;
+        position[0] = player.currentPlayer.transform.position.x;
+        position[1] = player.currentPlayer.transform.position.y;
+        position[2] = player.currentPlayer.transform.position.z;
     }
 
     public Vector3 GetPosition()
