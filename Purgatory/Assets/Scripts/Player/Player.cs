@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ISavable
 {
     public static Player instance;
 
@@ -36,8 +36,6 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-        DontDestroyOnLoad(this);
-
         instance = this;
 
         if(inputs == null)
@@ -51,36 +49,39 @@ public class Player : MonoBehaviour
         inputs.Player.SwitchDimension.performed += InitiateDimensionTravel;
         inputs.Player.Enable();
 
-        LoadPlayer();
-    }
+        Load();
 
-
-    private void Start()
-    {
         UpdateControllerData();
 
         CameraMaster.instance.SetPlayerCamTarget(currentPlayer.transform);
     }
 
+
+    private void Start()
+    {
+        DontDestroyOnLoad(this);
+
+        PlayerData data = SaveSystem.LoadPlayerData();
+        if (data != null && (data.currentScene != SceneManager.GetActiveScene().name))
+        {
+            SceneManager.LoadScene(data.currentScene);
+            return;
+        }       
+    }
+
     #region Saving + Loading
 
-    public void SavePlayer()
+    public void Save()
     {
         PlayerData data = new PlayerData(this, revolver);
         SaveSystem.SavePlayerData(data);
         Notification_System.Send_SystemNotify("Player has been saved");
     }
 
-    public void LoadPlayer()
+    public void Load()
     {
         PlayerData data = SaveSystem.LoadPlayerData();
         if(data == null) { return; }
-
-        if (data.currentScene != SceneManager.GetActiveScene().name)
-        {
-            SceneManager.LoadScene(data.currentScene);
-            return;
-        }
 
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
@@ -113,36 +114,39 @@ public class Player : MonoBehaviour
         isTargeting = false;
         Time.timeScale = 1f;
         revolver.bulletCount--;
-        SavePlayer();
+        Save();
         SceneController.instance.SaveScene();
     }
     public void UpdateControllerData()
     {
+        revolver = GameManager.instance.revolver;
         rb = currentPlayer.GetComponent<Rigidbody2D>();
         animator = currentPlayer.GetComponent<Animator>();
     }
 
+    #region NOTIFICATIONS
     public ActionWindow.ButtonFunction Travel_Purgatory;
     public ActionWindow.ButtonFunction Travel_Living;
     
     public void LaunchPurgatory()
     {
         revolver.bulletCount--;
-        SavePlayer();
+        Save();
         SceneController.instance.SaveScene();
         Laucher.LoadScene("Purgatory");
     }
-
     public void LaunchLiving()
     {
-        SavePlayer();
+        Save();
         SceneController.instance.SaveScene();
         Laucher.LoadScene("Living Realm");
     }
+    #endregion
 
+    #region INPUTS
     private void InitiateDimensionTravel(InputAction.CallbackContext context)
     {
-        if(Laucher.GetCurrentSceneName() == "Purgatory")
+        if (Laucher.GetCurrentSceneName() == "Purgatory")
         {
             Travel_Living = LaunchLiving;
             Notification_System.Send_ActionWindow("Do you wish to travel to the Living Realm?", "Travel", Travel_Living);
@@ -157,7 +161,6 @@ public class Player : MonoBehaviour
         }
         Debug.Log("Not enough bullets for this action");
     }
-
     private void Movement(InputAction.CallbackContext context)
     {
         float xValue = context.ReadValue<Vector2>().x;
@@ -202,12 +205,10 @@ public class Player : MonoBehaviour
         isTargeting = false;
         Time.timeScale = 1f;
     }
+    #endregion
+
     private void Update()
     {
         rb.velocity = new Vector2((direction.x * speed), rb.velocity.y);
-    }
-    private void OnDisable()
-    {
-        inputs.Player.Disable();
     }
 }
