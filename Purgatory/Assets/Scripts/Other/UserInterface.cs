@@ -9,8 +9,7 @@ public class UserInterface : MonoBehaviour
     public GameObject pauseMenu;
 
     private Player_Inputs inputs;
-
-    private void OnEnable()
+    private void Awake()
     {
         if (inputs == null)
         {

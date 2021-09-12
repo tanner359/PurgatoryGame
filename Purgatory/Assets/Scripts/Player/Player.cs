@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class Player : MonoBehaviour, ISavable
 {
@@ -12,6 +12,8 @@ public class Player : MonoBehaviour, ISavable
     public GameObject currentPlayer;
 
     public Revolver revolver;
+
+    public CinemachineVirtualCamera playerCam;
 
     #region UI
     public Texture2D Crosshair;
@@ -25,48 +27,38 @@ public class Player : MonoBehaviour, ISavable
     #endregion
 
     #region Components
-    private Player_Inputs inputs;
-    private Rigidbody2D rb;
-    private Animator animator;
+    public Player_Inputs inputs;
+    public Rigidbody2D rb;
+    public Animator animator;
     #endregion
 
     private Vector2 direction;
 
     public static bool isTargeting = false;
 
-    private void OnEnable()
+    private void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-        if(inputs == null)
+        if (inputs == null)
         {
             inputs = new Player_Inputs();
         }
 
         inputs.Player.Movement.performed += Movement;
-        inputs.Player.Movement.canceled += Movement;        
+        inputs.Player.Movement.canceled += Movement;
         inputs.Player.TargetingMode.performed += ToggleTargeting;
         inputs.Player.SwitchDimension.performed += InitiateDimensionTravel;
         inputs.Player.Enable();
 
-        Load();
-
-        UpdateControllerData();
-
-        CameraMaster.instance.SetPlayerCamTarget(currentPlayer.transform);
-    }
-
-
-    private void Start()
-    {
-        DontDestroyOnLoad(this);
-
-        PlayerData data = SaveSystem.LoadPlayerData();
-        if (data != null && (data.currentScene != SceneManager.GetActiveScene().name))
-        {
-            SceneManager.LoadScene(data.currentScene);
-            return;
-        }       
     }
 
     #region Saving + Loading
@@ -75,13 +67,12 @@ public class Player : MonoBehaviour, ISavable
     {
         PlayerData data = new PlayerData(this, revolver);
         SaveSystem.SavePlayerData(data);
-        Notification_System.Send_SystemNotify("Player has been saved");
     }
 
     public void Load()
-    {
+    {       
         PlayerData data = SaveSystem.LoadPlayerData();
-        if(data == null) { return; }
+        if(data == null) { RunSetup(); return; }
 
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
@@ -93,10 +84,11 @@ public class Player : MonoBehaviour, ISavable
         revolver.bulletCount = data.bulletCount;
         CharacterDatabase characterDatabase = Resources.Load<CharacterDatabase>("Data/Character Database");
         GameObject character = characterDatabase.GetCharacter(data.characterID);
-        GameObject GO = Instantiate(character, data.GetPosition(), Quaternion.identity, GameObject.Find("Characters").transform);
+        GameObject GO = Instantiate(character, Vector3.zero, Quaternion.identity, GameObject.Find("Characters").transform);
         GO.GetComponent<NPC>().enabled = false;
         GO.tag = "Player";
         currentPlayer = GO;
+        RunSetup();
     }
 
 
@@ -108,20 +100,19 @@ public class Player : MonoBehaviour, ISavable
         currentPlayer.tag = "NPC";
         currentPlayer = player;
         currentPlayer.tag = "Player";
-        UpdateControllerData();
-        CameraMaster.instance.SetPlayerCamTarget(player.transform);
+        RunSetup();
+        playerCam.Follow =  player.transform;
         Cursor.SetCursor(default, default, CursorMode.Auto);
         isTargeting = false;
         Time.timeScale = 1f;
         revolver.bulletCount--;
-        Save();
-        SceneController.instance.SaveScene();
+        GameManager.instance.SaveGame();
     }
-    public void UpdateControllerData()
+    public void RunSetup()
     {
-        revolver = GameManager.instance.revolver;
         rb = currentPlayer.GetComponent<Rigidbody2D>();
         animator = currentPlayer.GetComponent<Animator>();
+        playerCam.Follow = currentPlayer.transform;    
     }
 
     #region NOTIFICATIONS
@@ -131,14 +122,12 @@ public class Player : MonoBehaviour, ISavable
     public void LaunchPurgatory()
     {
         revolver.bulletCount--;
-        Save();
-        SceneController.instance.SaveScene();
+        GameManager.instance.SaveGame();
         Laucher.LoadScene("Purgatory");
     }
     public void LaunchLiving()
     {
-        Save();
-        SceneController.instance.SaveScene();
+        GameManager.instance.SaveGame();
         Laucher.LoadScene("Living Realm");
     }
     #endregion
@@ -193,7 +182,6 @@ public class Player : MonoBehaviour, ISavable
     }
     public void ToggleTargeting(InputAction.CallbackContext context)
     {
-        Debug.Log("ToggleTargeting");
         if (!isTargeting)
         {
             Cursor.SetCursor(Crosshair, new Vector2(Crosshair.width / 2, Crosshair.height/2), CursorMode.Auto);

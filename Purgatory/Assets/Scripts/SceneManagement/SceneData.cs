@@ -13,7 +13,7 @@ public class SceneData
 
     public SceneData(SceneController controller)
     {
-        sceneName = controller.sceneName;
+        sceneName = Laucher.GetCurrentSceneName();
         string[] active_NPCs = controller.GetActiveNPCs();
         Vector3[] positions = controller.GetActiveNPCPositions();
 

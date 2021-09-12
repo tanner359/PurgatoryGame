@@ -6,10 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Living Realm.unity
+    path: Assets/Scenes/Living Realm/Living Realm.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/Purgatory.unity
+    path: Assets/Scenes/Purgatory/Purgatory.unity
     guid: 9bb9b134c4f86604cb3cb12c31bf4d29
+  - enabled: 1
+    path: Assets/Scenes/Living Realm/OpenForeverBar.unity
+    guid: 5a0d62f6745582f419d0698b1d9449a0
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c1dda6c2534186a45b808807a69f84f3, type: 2}

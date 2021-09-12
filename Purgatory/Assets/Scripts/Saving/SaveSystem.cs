@@ -7,10 +7,13 @@ public static class SaveSystem
 {
     public static void SavePlayerData(PlayerData data)
     {
-        BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/player.data";
-        FileStream stream = new FileStream(path, FileMode.Create);
+        string path = Path.Combine(Application.persistentDataPath, "Save_01");
+        Directory.CreateDirectory(path);
+        string fileName = Path.Combine(path, "player.data");
 
+        BinaryFormatter formatter = new BinaryFormatter();
+        //string path = Application.persistentDataPath + "/gamesave/player.data";
+        FileStream stream = new FileStream(fileName, FileMode.Create);
         formatter.Serialize(stream, data);
         stream.Close();
 
@@ -36,7 +39,7 @@ public static class SaveSystem
     }
 
     public static void SaveSceneData(SceneData data)
-    {
+    {    
         BinaryFormatter formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/" + data.sceneName + ".data";
         FileStream stream = new FileStream(path, FileMode.Create);

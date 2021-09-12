@@ -17,7 +17,7 @@ public class InteractionController : MonoBehaviour
     public bool showRange = false;
     #endregion
     
-    public GameObject interactText;
+    private GameObject interactText;
 
     private void OnEnable()
     {
@@ -28,6 +28,17 @@ public class InteractionController : MonoBehaviour
         inputs.Player.Interact.performed += Interact;
         inputs.Player.Enable();
     }
+
+    private void Awake()
+    {
+        Setup();
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        Setup();
+    }
+
     private void Update()
     {
         ScanInteractArea();
@@ -50,6 +61,22 @@ public class InteractionController : MonoBehaviour
     #endregion
 
     #region Functions
+
+    public void Setup()
+    {
+        InteractionData data = Resources.Load<InteractionData>("Data/Interaction Data");
+        GameObject canvas = GameObject.Find("Interactions");
+        if (!canvas)
+        {          
+            canvas = Instantiate(data.defaultTextCanvas, Vector3.zero, Quaternion.identity);
+            canvas.name = "Interactions";
+            interactText = Instantiate(data.defaultInteractionText, canvas.transform);
+            interactText.SetActive(false);
+            return;
+        }
+        interactText = Instantiate(data.defaultInteractionText, canvas.transform);
+        interactText.SetActive(false);
+    }
     public void ScanInteractArea() // searching for items to interact with
     {
         Collider2D[] objects = Physics2D.OverlapCircleAll(player.currentPlayer.transform.position, interactionRange);

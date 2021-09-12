@@ -59,7 +59,7 @@ Material:
     m_Floats:
     - Is_Active: 0
     - Scale: 1.1
-    - Thickness: 0.01
+    - Thickness: 0.02
     - _Depth_Multiplier: 1
     - _EnableExternalAlpha: 0
     - _Offset: 0

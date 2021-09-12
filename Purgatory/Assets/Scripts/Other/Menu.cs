@@ -6,9 +6,7 @@ public class Menu : MonoBehaviour
 {
     public void SaveGame()
     {
-        SaveSystem.SavePlayerData(new PlayerData(Player.instance, Player.instance.revolver));
-        SaveSystem.SaveSceneData(new SceneData(SceneController.instance));
-        Notification_System.Send_SystemNotify("The game has been saved");
+        GameManager.instance.SaveGame();       
     }
 
     public void Resume()
