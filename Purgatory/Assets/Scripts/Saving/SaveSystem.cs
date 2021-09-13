@@ -5,15 +5,32 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveSystem
 {
-    public static void SavePlayerData(PlayerData data)
-    {
-        string path = Path.Combine(Application.persistentDataPath, "Save_01");
-        Directory.CreateDirectory(path);
-        string fileName = Path.Combine(path, "player.data");
+    public static string CurrentSave;
 
+    public static string[] GetSaveNames()
+    {
+        DirectoryInfo dir = new DirectoryInfo(Application.persistentDataPath);
+        DirectoryInfo[] info = dir.GetDirectories();
+        string[] fileNames = new string[info.Length];
+
+        for(int i = 0; i < info.Length; i++)
+        {
+            fileNames[i] = info[i].Name;
+        }
+        return fileNames;
+    }
+    public static void CreateNewSave(string name)
+    {
+        string path = Path.Combine(Application.persistentDataPath, name);
+        var directory = Directory.CreateDirectory(path);
+        CurrentSave = directory.FullName;
+        Debug.Log(directory.FullName);
+    }
+    public static void SavePlayerData(PlayerData data)
+    {       
         BinaryFormatter formatter = new BinaryFormatter();
-        //string path = Application.persistentDataPath + "/gamesave/player.data";
-        FileStream stream = new FileStream(fileName, FileMode.Create);
+        string path = CurrentSave + "/player.data";
+        FileStream stream = new FileStream(path, FileMode.Create);
         formatter.Serialize(stream, data);
         stream.Close();
 
@@ -21,7 +38,7 @@ public static class SaveSystem
     }
     public static PlayerData LoadPlayerData()
     {
-        string path = Application.persistentDataPath + "/player.data";
+        string path = CurrentSave + "/player.data";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -41,7 +58,7 @@ public static class SaveSystem
     public static void SaveSceneData(SceneData data)
     {    
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/" + data.sceneName + ".data";
+        string path = CurrentSave + "/" + data.sceneName + ".data";
         FileStream stream = new FileStream(path, FileMode.Create);
 
         formatter.Serialize(stream, data);
@@ -51,7 +68,7 @@ public static class SaveSystem
     }
     public static SceneData LoadSceneData(string sceneName)
     {
-        string path = Application.persistentDataPath + "/" + sceneName + ".data";
+        string path = CurrentSave + "/" + sceneName + ".data";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
