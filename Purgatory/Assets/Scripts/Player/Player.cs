@@ -52,15 +52,23 @@ public class Player : MonoBehaviour, ISavable
         {
             inputs = new Player_Inputs();
         }
-        Debug.Log("setting up player inputs");
         inputs.Player.Movement.performed += Movement;
         inputs.Player.Movement.canceled += Movement;
         inputs.Player.TargetingMode.performed += ToggleTargeting;
         inputs.Player.SwitchDimension.performed += InitiateDimensionTravel;
         inputs.Player.Enable();
+        Load();
+    }
+    private void Start()
+    {
+        PlayerData data = SaveSystem.LoadPlayerData();
+        if(data != null)
+        {
+            currentPlayer.transform.position = new Vector2(data.position[0], data.position[1]);
+        }
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         inputs.Player.Disable();
         instance = null;
@@ -111,7 +119,6 @@ public class Player : MonoBehaviour, ISavable
         isTargeting = false;
         Time.timeScale = 1f;
         revolver.bulletCount--;
-        GameManager.instance.SaveGame();
     }
     public void RunSetup()
     {
@@ -153,7 +160,7 @@ public class Player : MonoBehaviour, ISavable
             Notification_System.Send_ActionWindow("Do you want to travel to Purgatory?\n\n\nWarning: This action consumes 1 Bullet.", "Travel", Travel_Purgatory);
             return;
         }
-        Debug.Log("Not enough bullets for this action");
+        Notification_System.Send_SystemNotify("Not enough bullets for this action", Color.red);
     }
     private void Movement(InputAction.CallbackContext context)
     {
@@ -189,7 +196,7 @@ public class Player : MonoBehaviour, ISavable
     {
         if (!isTargeting)
         {
-            Cursor.SetCursor(Crosshair, new Vector2(Crosshair.width / 2, Crosshair.height/2), CursorMode.Auto);
+            Cursor.SetCursor(Crosshair, new Vector2(Crosshair.width / 2, Crosshair.height/2), CursorMode.ForceSoftware);
             isTargeting = true;
             Time.timeScale = 0.5f;
             return;

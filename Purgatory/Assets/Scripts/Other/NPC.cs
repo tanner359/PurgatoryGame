@@ -2,14 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPC : MonoBehaviour
+public class NPC : MonoBehaviour, ISavable
 {
     public Material material;
-
-
-    private void Start()
+    public void Save()
     {
-        
+        NPCData data = new NPCData(this);
+        SaveSystem.SaveNPCData(data);
+    }
+
+    private void Awake()
+    {
+        NPCData data = SaveSystem.LoadNPCData(Laucher.GetCurrentSceneName(), gameObject.name);
+        if(data != null)
+        {
+            transform.position = new Vector3(data.position[0], data.position[1], data.position[2]);
+        }
     }
 
     private void OnMouseEnter()

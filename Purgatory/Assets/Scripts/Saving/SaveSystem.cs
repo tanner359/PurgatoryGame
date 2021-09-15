@@ -1,7 +1,7 @@
 using System.IO;
 using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
-
+using UnityEngine.SceneManagement;
 
 public static class SaveSystem
 {
@@ -21,15 +21,20 @@ public static class SaveSystem
     }
     public static void CreateNewSave(string name)
     {
-        string path = Path.Combine(Application.persistentDataPath, name);
-        var directory = Directory.CreateDirectory(path);
+        string p_Main = Path.Combine(Application.persistentDataPath, name);
+        var directory = Directory.CreateDirectory(p_Main);
         CurrentSave = directory.FullName;
-        Debug.Log(directory.FullName);
+
+        string p_Levels = Path.Combine(CurrentSave, "Levels");
+        Directory.CreateDirectory(p_Levels);
+
+        string p_Player = Path.Combine(CurrentSave, "Player");
+        Directory.CreateDirectory(p_Player);
     }
     public static void SavePlayerData(PlayerData data)
     {       
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = CurrentSave + "/player.data";
+        string path = Path.Combine(CurrentSave, "Player")  + "/player.data";
         FileStream stream = new FileStream(path, FileMode.Create);
         formatter.Serialize(stream, data);
         stream.Close();
@@ -38,7 +43,7 @@ public static class SaveSystem
     }
     public static PlayerData LoadPlayerData()
     {
-        string path = CurrentSave + "/player.data";
+        string path = Path.Combine(CurrentSave, "Player") + "/player.data";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -55,26 +60,61 @@ public static class SaveSystem
         }
     }
 
-    public static void SaveSceneData(SceneData data)
-    {    
-        BinaryFormatter formatter = new BinaryFormatter();
-        string path = CurrentSave + "/" + data.sceneName + ".data";
-        FileStream stream = new FileStream(path, FileMode.Create);
+    public static void SaveNPCData(NPCData data)
+    {
+        string level = Path.Combine(CurrentSave, "Levels", data.scene);
+        if (!Directory.Exists(level)){
+            Directory.CreateDirectory(level);
+        }
 
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = level + "/" + data.name + ".data";
+        FileStream stream = new FileStream(path, FileMode.Create);
         formatter.Serialize(stream, data);
         stream.Close();
 
-        Debug.Log("data for " + data.sceneName + " was successfully saved at " + path);
+        Debug.Log("player data was successfully saved at " + path);
     }
-    public static SceneData LoadSceneData(string sceneName)
+    public static NPCData LoadNPCData(string scene, string name)
     {
-        string path = CurrentSave + "/" + sceneName + ".data";
+        string level = Path.Combine(CurrentSave, "Levels", scene);
+        string path = level + "/" + name + ".data";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
 
-            SceneData data = formatter.Deserialize(stream) as SceneData;
+            NPCData data = formatter.Deserialize(stream) as NPCData;
+            stream.Close();
+
+            return data;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static void SaveLevelData(LevelData data)
+    {    
+        BinaryFormatter formatter = new BinaryFormatter();
+        string path = CurrentSave + "/" + data.levelName + ".data";
+        FileStream stream = new FileStream(path, FileMode.Create);
+
+        formatter.Serialize(stream, data);
+        stream.Close();
+
+        Debug.Log("data for " + data.levelName + " was successfully saved at " + path);
+    }
+    public static LevelData LoadLevelData(string sceneName)
+    {
+        string path = CurrentSave + "/Levels" + "/" + sceneName + ".data";
+        if (File.Exists(path))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            LevelData data = formatter.Deserialize(stream) as LevelData;
             stream.Close();
 
             return data;

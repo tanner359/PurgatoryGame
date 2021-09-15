@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class CharacterID : MonoBehaviour
 {
-    public string ID;
+    public string characterID;
 }

@@ -11,7 +11,7 @@ public class CharacterDatabase : ScriptableObject
     {
         for(int i = 0; i < characters.Count; i++)
         {
-            if(characters[i].GetComponent<CharacterID>().ID == ID)
+            if(characters[i].GetComponent<CharacterID>().characterID == ID)
             {
                 return characters[i];
             }

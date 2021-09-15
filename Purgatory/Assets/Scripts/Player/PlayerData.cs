@@ -15,7 +15,7 @@ public class PlayerData
     {
         currentScene = SceneManager.GetActiveScene().name;
         bulletCount = revolver.bulletCount;
-        characterID = player.currentPlayer.GetComponent<CharacterID>().ID;
+        characterID = player.currentPlayer.GetComponent<CharacterID>().characterID;
 
         position = new float[3];
         position[0] = player.currentPlayer.transform.position.x;

@@ -7,13 +7,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    private void OnEnable()
-    {
-        if (this != instance) return;
-        LoadGame();
-        Notification_System.RunSetup();      
-    }
-
     private void Awake()
     {
         DontDestroyOnLoad(this);
@@ -28,33 +21,16 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("Loaded Last saved level");
-        PlayerData data = SaveSystem.LoadPlayerData();
-        if (data != null && (data.currentScene != Laucher.GetCurrentSceneName()))
-        {
-            Laucher.LoadScene(data.currentScene);
-            return;
-        }
+        if (this != instance) return;
+        Notification_System.RunSetup();
     }
-    
+
     private void OnLevelWasLoaded(int level)
     {
-        Debug.Log(level);
         if(SceneManager.GetSceneByBuildIndex(level).name == "MainMenu")
         {
             Destroy(gameObject);
-            return;
         }
-        StartCoroutine(LoadLevel());
-    }
-
-    public IEnumerator LoadLevel()
-    {
-        yield return new WaitForFixedUpdate();
-        Debug.Log("Level Loaded");
-        LoadGame();
-        Notification_System.RunSetup();
-        SaveGame();
     }
 
     public void SaveGame()
@@ -69,21 +45,5 @@ public class GameManager : MonoBehaviour
         }
 
         Notification_System.Send_SystemNotify("The game has been saved");
-    }
-
-    public void LoadGame()
-    {
-        Debug.Log("Load Game");
-        GameObject[] sceneObjects = FindObjectsOfType<GameObject>();
-
-        for (int i = 0; i < sceneObjects.Length; i++)
-        {
-            ISavable target = sceneObjects[i].GetComponent<ISavable>();
-            if (target != null)
-            {
-                Debug.Log(sceneObjects[i].name + " was loaded");
-                target.Load();
-            }
-        }
-    }
+    } 
 }

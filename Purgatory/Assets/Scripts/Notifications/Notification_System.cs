@@ -21,6 +21,13 @@ public static class Notification_System
         newGO.GetComponent<SystemNotify>().SetAttributes(message);
     }
 
+    public static void Send_SystemNotify(string message, Color color)
+    {
+        GameObject defaultOB = Resources.Load<NotificationData>("Data/Notification Data").defaultSystemNotify;
+        GameObject newGO = Object.Instantiate(defaultOB, Notifications);
+        newGO.GetComponent<SystemNotify>().SetAttributes(message, color);
+    }
+
     public static void RunSetup()
     {
         data = Resources.Load<NotificationData>("Data/Notification Data");
