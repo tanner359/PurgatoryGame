@@ -52,13 +52,18 @@ public class Player : MonoBehaviour, ISavable
         {
             inputs = new Player_Inputs();
         }
-
+        Debug.Log("setting up player inputs");
         inputs.Player.Movement.performed += Movement;
         inputs.Player.Movement.canceled += Movement;
         inputs.Player.TargetingMode.performed += ToggleTargeting;
         inputs.Player.SwitchDimension.performed += InitiateDimensionTravel;
         inputs.Player.Enable();
+    }
 
+    private void OnDestroy()
+    {
+        inputs.Player.Disable();
+        instance = null;
     }
 
     #region Saving + Loading

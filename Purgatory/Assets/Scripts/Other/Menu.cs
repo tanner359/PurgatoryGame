@@ -23,6 +23,11 @@ public class Menu : MonoBehaviour
         Laucher.LoadScene("Living Realm");
     }
 
+    public void LoadScene(string sceneName)
+    {
+        Laucher.LoadScene(sceneName);
+    }
+
     public void SaveGame()
     {
         GameManager.instance.SaveGame();       

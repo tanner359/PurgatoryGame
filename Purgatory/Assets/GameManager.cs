@@ -36,10 +36,15 @@ public class GameManager : MonoBehaviour
             return;
         }
     }
-
     
     private void OnLevelWasLoaded(int level)
     {
+        Debug.Log(level);
+        if(SceneManager.GetSceneByBuildIndex(level).name == "MainMenu")
+        {
+            Destroy(gameObject);
+            return;
+        }
         StartCoroutine(LoadLevel());
     }
 

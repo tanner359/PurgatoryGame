@@ -22,7 +22,6 @@ public class UserInterface : MonoBehaviour
 
     public void Pause(InputAction.CallbackContext context)
     {
-        Debug.Log("Hello");
         if (!pauseMenu.activeInHierarchy)
         {
             pauseMenu.SetActive(true);
@@ -31,5 +30,9 @@ public class UserInterface : MonoBehaviour
         }
         pauseMenu.SetActive(false);
         Time.timeScale = 1;
+    }
+    private void OnDisable()
+    {
+        inputs.Player.Pause.Disable();
     }
 }

@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Living Realm/OpenForeverBar.unity
     guid: 5a0d62f6745582f419d0698b1d9449a0
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: cd8025e39611c084597ca4715cc8571f
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c1dda6c2534186a45b808807a69f84f3, type: 2}
