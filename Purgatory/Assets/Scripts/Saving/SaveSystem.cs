@@ -28,9 +28,13 @@ public static class SaveSystem
         string p_Levels = Path.Combine(CurrentSave, "Levels");
         Directory.CreateDirectory(p_Levels);
 
+        
+
         string p_Player = Path.Combine(CurrentSave, "Player");
         Directory.CreateDirectory(p_Player);
     }
+
+    #region Player
     public static void SavePlayerData(PlayerData data)
     {       
         BinaryFormatter formatter = new BinaryFormatter();
@@ -57,24 +61,30 @@ public static class SaveSystem
             return null;
         }
     }
+    #endregion
 
+    #region NPC
     public static void SaveNPCData(NPCData data)
     {
         string level = Path.Combine(CurrentSave, "Levels", data.scene);
         if (!Directory.Exists(level)){
             Directory.CreateDirectory(level);
         }
+        string p_NPC = Path.Combine(level, "NPC");     
+        if (!Directory.Exists(p_NPC)){
+            Directory.CreateDirectory(p_NPC);
+        }
 
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = level + "/" + data.name + ".data";
+        string path = p_NPC + "/" + data.name + ".data";
         FileStream stream = new FileStream(path, FileMode.Create);
         formatter.Serialize(stream, data);
         stream.Close();
     }
     public static NPCData LoadNPCData(string scene, string name)
     {
-        string level = Path.Combine(CurrentSave, "Levels", scene);
-        string path = level + "/" + name + ".data";
+        string NPC = Path.Combine(CurrentSave, "Levels", scene, "NPC");
+        string path = NPC + "/" + name + ".data";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -91,6 +101,29 @@ public static class SaveSystem
         }
     }
 
+    public static NPCData[] LoadAllNPCData(string scene)
+    {
+        string path = Path.Combine(CurrentSave, "Levels", scene, "NPC");
+        if (!Directory.Exists(path))
+        {
+            return null;
+        }
+        DirectoryInfo dir = new DirectoryInfo(path);
+        FileInfo[] info = dir.GetFiles();
+
+        NPCData[] dataFiles = new NPCData[info.Length];
+
+        for (int i = 0; i < info.Length; i++)
+        {
+            string name = info[i].Name.Replace(".data", null);
+            dataFiles[i] = LoadNPCData(scene, name);
+        }
+        return dataFiles;
+
+    }
+    #endregion
+
+    #region Level
     public static void SaveLevelData(LevelData data)
     {    
         BinaryFormatter formatter = new BinaryFormatter();
@@ -119,4 +152,5 @@ public static class SaveSystem
             return null;
         }
     }
+    #endregion
 }

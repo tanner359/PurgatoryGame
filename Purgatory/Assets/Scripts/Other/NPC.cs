@@ -9,7 +9,7 @@ public class NPC : MonoBehaviour, ISavable, IControllable
     public Material material;
     public void Save()
     {
-        if (!enabled) { return; }
+        //if (!enabled) { return; }
         NPCData data = new NPCData(this);
         SaveSystem.SaveNPCData(data);
     }

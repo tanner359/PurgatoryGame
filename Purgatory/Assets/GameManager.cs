@@ -14,6 +14,31 @@ public class GameManager : MonoBehaviour
         GameObject GO = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         GO.name = "Player";
     }
+
+    private void Start()
+    {
+        LoadNonNativeNPC();
+    }
+
+
+    public void LoadNonNativeNPC()
+    {
+        NPCData[] data = SaveSystem.LoadAllNPCData(Laucher.GetCurrentSceneName());
+        Debug.Log(data.Length);
+        CharacterDatabase database = Resources.Load<CharacterDatabase>("Data/Character Database");
+        if (data == null) { return; }
+
+        for(int i = 0; i < data.Length; i++)
+        {
+            Debug.Log(data[0]);
+            if (GameObject.Find(data[i].name) == null)
+            {
+                Instantiate(database.GetCharacter(data[i].characterID), Vector3.zero, Quaternion.identity).name = data[i].name;
+            }
+        }
+    }
+
+
     public static void SaveGame()
     {
         GameObject[] sceneObjects = FindObjectsOfType<GameObject>();
