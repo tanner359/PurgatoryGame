@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/*
+ * This script will be used for all UI implementation
+ * 
+ */
+
 
 public class UserInterface : MonoBehaviour
 {
     public GameObject pauseMenu;
 
     private Player_Inputs inputs;
+
     private void Awake()
     {
         if (inputs == null)
@@ -33,6 +39,7 @@ public class UserInterface : MonoBehaviour
     }
     private void OnDisable()
     {
-        inputs.Player.Pause.Disable();
+        Time.timeScale = 1;
+        inputs.Player.Pause.Disable(); 
     }
 }

@@ -15,12 +15,12 @@ public class PlayerData
     {
         currentScene = SceneManager.GetActiveScene().name;
         bulletCount = revolver.bulletCount;
-        characterID = player.currentPlayer.GetComponent<CharacterID>().characterID;
+        characterID = player.currentCharacter.GetComponent<CharacterID>().characterID;
 
         position = new float[3];
-        position[0] = player.currentPlayer.transform.position.x;
-        position[1] = player.currentPlayer.transform.position.y;
-        position[2] = player.currentPlayer.transform.position.z;
+        position[0] = player.currentCharacter.transform.position.x;
+        position[1] = player.currentCharacter.transform.position.y;
+        position[2] = player.currentCharacter.transform.position.z;
     }
 
     public Vector3 GetPosition()

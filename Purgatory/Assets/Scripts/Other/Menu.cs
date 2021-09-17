@@ -30,7 +30,7 @@ public class Menu : MonoBehaviour
 
     public void SaveGame()
     {
-        GameManager.instance.SaveGame();       
+        GameManager.SaveGame();       
     }
 
     public void Resume()

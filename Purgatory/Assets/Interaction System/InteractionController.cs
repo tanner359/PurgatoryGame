@@ -34,11 +34,6 @@ public class InteractionController : MonoBehaviour
         Setup();
     }
 
-    private void OnLevelWasLoaded(int level)
-    {
-        Setup();
-    }
-
     private void Update()
     {
         ScanInteractArea();
@@ -79,7 +74,7 @@ public class InteractionController : MonoBehaviour
     }
     public void ScanInteractArea() // searching for items to interact with
     {
-        Collider2D[] objects = Physics2D.OverlapCircleAll(player.currentPlayer.transform.position, interactionRange);
+        Collider2D[] objects = Physics2D.OverlapCircleAll(player.currentCharacter.transform.position, interactionRange);
         if (objects.Length > 0)
         {
             List<GameObject> interactables = new List<GameObject>(); // objects that the system found that have ID's
@@ -93,7 +88,7 @@ public class InteractionController : MonoBehaviour
             }
             if (interactables.Count > 0) // if the system found any interactable items
             {
-                closestItem = GetClosestItem(player.currentPlayer.transform.position, interactables); // find the closest item to the player
+                closestItem = GetClosestItem(player.currentCharacter.transform.position, interactables); // find the closest item to the player
                 InteractionID id = closestItem.GetComponent<InteractionID>(); //get the ID
                 DisplayInteractText(id.textPosition, id.InteractText); //display the interaction prompt on that item
             }
@@ -133,10 +128,10 @@ public class InteractionController : MonoBehaviour
     private void OnDrawGizmos()
     {
         //displays the interact radius
-        if (showRange && player.currentPlayer)
+        if (showRange && player.currentCharacter)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(player.currentPlayer.transform.position, interactionRange);
+            Gizmos.DrawWireSphere(player.currentCharacter.transform.position, interactionRange);
         }
     }
     #endregion

@@ -9,7 +9,7 @@ public class Door : MonoBehaviour
     
     public void OpenDoor()
     {
-        GameManager.instance.SaveGame();
+        GameManager.SaveGame();
         Laucher.LoadScene(levelToLoad);
     }
 }

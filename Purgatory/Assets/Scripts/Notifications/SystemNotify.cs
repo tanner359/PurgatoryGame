@@ -5,7 +5,8 @@ using TMPro;
 
 public class SystemNotify : MonoBehaviour
 {
-    public TMP_Text message;  
+    public TMP_Text message;
+    float lifeTime;
 
     public void SetAttributes(string message)
     {
@@ -27,13 +28,14 @@ public class SystemNotify : MonoBehaviour
                 Destroy(parent.GetChild(i).gameObject);
             }
         }
-        float lifeTime = 0.18f * message.text.Length;
+        lifeTime = 0.18f * message.text.Length;
         if (lifeTime < 2) { lifeTime = 2; }
-        Destroy(gameObject, lifeTime);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        message.color = message.color - new Color(0, 0, 0, 0.002f);
+        lifeTime -= Time.deltaTime;
+        if (lifeTime < 0) { Destroy(gameObject); }
+        message.color = message.color - new Color(0, 0, 0, message.color.a * (0.5f * Time.deltaTime));
     }
 }

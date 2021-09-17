@@ -8,10 +8,12 @@ public class NPCData
     public string name;
     public string scene;
     public string characterID;
+    public bool isPossessed;
     public float[] position;
 
     public NPCData(NPC npc)
     {
+        this.isPossessed = npc.isPossessed;
         this.name = npc.name;
         this.scene = Laucher.GetCurrentSceneName();
 

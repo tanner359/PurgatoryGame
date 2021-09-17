@@ -5,35 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public GameObject playerPrefab;
 
     private void Awake()
     {
-        DontDestroyOnLoad(this);
+        Notification_System.RunSetup(); // setup required pre-requisites.
 
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        if (this != instance) return;
-        Notification_System.RunSetup();
+        GameObject GO = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        GO.name = "Player";
     }
-
-    private void OnLevelWasLoaded(int level)
-    {
-        if(SceneManager.GetSceneByBuildIndex(level).name == "MainMenu")
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    public void SaveGame()
+    public static void SaveGame()
     {
         GameObject[] sceneObjects = FindObjectsOfType<GameObject>();
         for(int i = 0; i < sceneObjects.Length; i++)
@@ -45,5 +26,5 @@ public class GameManager : MonoBehaviour
         }
 
         Notification_System.Send_SystemNotify("The game has been saved");
-    } 
+    }
 }

@@ -9,7 +9,9 @@ public class Player : MonoBehaviour, ISavable
 {
     public static Player instance;
 
-    public GameObject currentPlayer;
+    public GameObject defaultCharacter;
+
+    public GameObject currentCharacter;
 
     public Revolver revolver;
 
@@ -36,18 +38,8 @@ public class Player : MonoBehaviour, ISavable
 
     public static bool isTargeting = false;
 
-    private void Awake()
+    private void OnEnable()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-
         if (inputs == null)
         {
             inputs = new Player_Inputs();
@@ -57,6 +49,21 @@ public class Player : MonoBehaviour, ISavable
         inputs.Player.TargetingMode.performed += ToggleTargeting;
         inputs.Player.SwitchDimension.performed += InitiateDimensionTravel;
         inputs.Player.Enable();
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Debug.Log("Destroy Copy");
+            Destroy(gameObject);
+            return;
+        }
+
         Load();
     }
     private void Start()
@@ -64,14 +71,13 @@ public class Player : MonoBehaviour, ISavable
         PlayerData data = SaveSystem.LoadPlayerData();
         if(data != null)
         {
-            currentPlayer.transform.position = new Vector2(data.position[0], data.position[1]);
+            currentCharacter.transform.position = new Vector2(data.position[0], data.position[1]);
         }
     }
 
     private void OnDisable()
     {
         inputs.Player.Disable();
-        instance = null;
     }
 
     #region Saving + Loading
@@ -98,23 +104,20 @@ public class Player : MonoBehaviour, ISavable
         CharacterDatabase characterDatabase = Resources.Load<CharacterDatabase>("Data/Character Database");
         GameObject character = characterDatabase.GetCharacter(data.characterID);
         GameObject GO = Instantiate(character, Vector3.zero, Quaternion.identity, GameObject.Find("Characters").transform);
-        GO.GetComponent<NPC>().enabled = false;
-        GO.tag = "Player";
-        currentPlayer = GO;
+        GO.name = character.name;
+        GO.GetComponent<IControllable>().EnableControl(this);
         RunSetup();
     }
 
 
     #endregion
 
-    public void SwitchPlayer(GameObject player)
+    public void SwitchPlayer(GameObject target)
     {
-        currentPlayer.GetComponent<NPC>().enabled = true;
-        currentPlayer.tag = "NPC";
-        currentPlayer = player;
-        currentPlayer.tag = "Player";
+        currentCharacter.GetComponent<IControllable>().RevokeControl(this);
+        target.GetComponent<IControllable>().EnableControl(this);
         RunSetup();
-        playerCam.Follow =  player.transform;
+        playerCam.Follow = target.transform;
         Cursor.SetCursor(default, default, CursorMode.Auto);
         isTargeting = false;
         Time.timeScale = 1f;
@@ -122,9 +125,16 @@ public class Player : MonoBehaviour, ISavable
     }
     public void RunSetup()
     {
-        rb = currentPlayer.GetComponent<Rigidbody2D>();
-        animator = currentPlayer.GetComponent<Animator>();
-        playerCam.Follow = currentPlayer.transform;    
+        if(currentCharacter == null)
+        {
+            GameObject GO = Instantiate(defaultCharacter, Vector3.zero, Quaternion.identity);
+            GO.name = defaultCharacter.name;
+            currentCharacter = GO;
+            currentCharacter.GetComponent<IControllable>().EnableControl(this);
+        }
+        rb = currentCharacter.GetComponent<Rigidbody2D>();
+        animator = currentCharacter.GetComponent<Animator>();
+        playerCam.Follow = currentCharacter.transform;    
     }
 
     #region NOTIFICATIONS
@@ -134,13 +144,13 @@ public class Player : MonoBehaviour, ISavable
     public void LaunchPurgatory()
     {
         revolver.bulletCount--;
-        GameManager.instance.SaveGame();
-        Laucher.LoadScene("Purgatory");
+        GameManager.SaveGame();
+        StartCoroutine(Laucher.LoadScene("Purgatory", 2));
     }
     public void LaunchLiving()
     {
-        GameManager.instance.SaveGame();
-        Laucher.LoadScene("Living Realm");
+        GameManager.SaveGame();
+        StartCoroutine(Laucher.LoadScene("Living Realm", 2));
     }
     #endregion
 
@@ -167,11 +177,11 @@ public class Player : MonoBehaviour, ISavable
         float xValue = context.ReadValue<Vector2>().x;
         float yValue = context.ReadValue<Vector2>().y;
 
-        if (xValue < -deadZone && currentPlayer.transform.localScale.x > 0)
+        if (xValue < -deadZone && currentCharacter.transform.localScale.x > 0)
         {
             Flip();
         }
-        else if (xValue > deadZone && currentPlayer.transform.localScale.x < 0)
+        else if (xValue > deadZone && currentCharacter.transform.localScale.x < 0)
         {
             Flip();
         }
@@ -190,7 +200,7 @@ public class Player : MonoBehaviour, ISavable
     }
     private void Flip()
     {
-        currentPlayer.transform.localScale = new Vector3(currentPlayer.transform.localScale.x * -1, currentPlayer.transform.localScale.y, currentPlayer.transform.localScale.z);
+        currentCharacter.transform.localScale = new Vector3(currentCharacter.transform.localScale.x * -1, currentCharacter.transform.localScale.y, currentCharacter.transform.localScale.z);
     }
     public void ToggleTargeting(InputAction.CallbackContext context)
     {

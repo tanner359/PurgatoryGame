@@ -10,6 +10,12 @@ public static class Laucher
         SceneManager.LoadScene(index);        
     }
 
+    public static IEnumerator LoadScene(string sceneName, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(sceneName);
+    }
+
     public static void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);

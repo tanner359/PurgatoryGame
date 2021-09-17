@@ -38,8 +38,6 @@ public static class SaveSystem
         FileStream stream = new FileStream(path, FileMode.Create);
         formatter.Serialize(stream, data);
         stream.Close();
-
-        Debug.Log("player data was successfully saved at " + path);
     }
     public static PlayerData LoadPlayerData()
     {
@@ -72,8 +70,6 @@ public static class SaveSystem
         FileStream stream = new FileStream(path, FileMode.Create);
         formatter.Serialize(stream, data);
         stream.Close();
-
-        Debug.Log("player data was successfully saved at " + path);
     }
     public static NPCData LoadNPCData(string scene, string name)
     {
@@ -103,8 +99,6 @@ public static class SaveSystem
 
         formatter.Serialize(stream, data);
         stream.Close();
-
-        Debug.Log("data for " + data.levelName + " was successfully saved at " + path);
     }
     public static LevelData LoadLevelData(string sceneName)
     {
