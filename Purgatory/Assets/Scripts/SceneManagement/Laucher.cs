@@ -10,14 +10,15 @@ public static class Laucher
         SceneManager.LoadScene(index);        
     }
 
-    public static void LoadScene(string sceneName)
+    public static IEnumerator LoadScene(string sceneName, float delay)
     {
+        yield return new WaitForSeconds(delay);
         SceneManager.LoadScene(sceneName);
     }
 
-    public static void LoadPurgatory()
+    public static void LoadScene(string sceneName)
     {
-        SceneManager.LoadScene("Purgatory");
+        SceneManager.LoadScene(sceneName);
     }
 
     public static void CloseApplication()
