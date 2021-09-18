@@ -34,6 +34,24 @@ public static class SaveSystem
         Directory.CreateDirectory(p_Player);
     }
 
+    public static void DeleteSave(string name)
+    {
+        string path = Path.Combine(Application.persistentDataPath, name);
+        string[] dirs = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
+        Debug.Log(dirs.Length);
+
+        for(int i = dirs.Length-1; i >= 0; i--)
+        {
+            string[] files = Directory.GetFiles(dirs[i]);
+            foreach (string file in files)
+            {
+                File.Delete(file);
+            }
+            Directory.Delete(dirs[i]);
+        }
+        Directory.Delete(path);
+    }
+
     #region Player
     public static void SavePlayerData(PlayerData data)
     {       
@@ -120,37 +138,6 @@ public static class SaveSystem
         }
         return dataFiles;
 
-    }
-    #endregion
-
-    #region Level
-    public static void SaveLevelData(LevelData data)
-    {    
-        BinaryFormatter formatter = new BinaryFormatter();
-        string path = CurrentSave + "/" + data.levelName + ".data";
-        FileStream stream = new FileStream(path, FileMode.Create);
-
-        formatter.Serialize(stream, data);
-        stream.Close();
-    }
-    public static LevelData LoadLevelData(string sceneName)
-    {
-        string path = CurrentSave + "/Levels" + "/" + sceneName + ".data";
-        if (File.Exists(path))
-        {
-            BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(path, FileMode.Open);
-
-            LevelData data = formatter.Deserialize(stream) as LevelData;
-            stream.Close();
-
-            return data;
-        }
-        else
-        {
-            Debug.Log("No save data for " + sceneName + " to load.");
-            return null;
-        }
     }
     #endregion
 }

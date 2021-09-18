@@ -15,4 +15,16 @@ public class FileLoad : MonoBehaviour
         PlayerData data = SaveSystem.LoadPlayerData();
         Laucher.LoadScene(data.currentScene);
     }
+
+    public void DeleteSave()
+    {
+        ActionWindow.ButtonFunction function = Delete;
+        Notification_System.Send_ActionWindow("Do you want to delete " + fileName.text + "?", "Delete", function);
+    }
+
+    public void Delete()
+    {
+        SaveSystem.DeleteSave(fileName.text);
+        Destroy(gameObject);
+    }
 }

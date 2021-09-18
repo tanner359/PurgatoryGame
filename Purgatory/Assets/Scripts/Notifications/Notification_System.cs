@@ -9,6 +9,7 @@ public static class Notification_System
     private static NotificationData data;
     public static void Send_ActionWindow(string message, string buttonName, ActionWindow.ButtonFunction function)
     {
+        RunSetup();
         NotificationData data = Resources.Load<NotificationData>("Data/Notification Data");
         GameObject newGO = Object.Instantiate(data.defaultActionWindow, Notifications);
         newGO.GetComponent<ActionWindow>().SetAttributes(message, buttonName, function);
@@ -16,6 +17,7 @@ public static class Notification_System
 
     public static void Send_SystemNotify(string message)
     {
+        RunSetup();
         GameObject defaultOB = Resources.Load<NotificationData>("Data/Notification Data").defaultSystemNotify;
         GameObject newGO = Object.Instantiate(defaultOB, Notifications);
         newGO.GetComponent<SystemNotify>().SetAttributes(message);
@@ -23,6 +25,7 @@ public static class Notification_System
 
     public static void Send_SystemNotify(string message, Color color)
     {
+        RunSetup();
         GameObject defaultOB = Resources.Load<NotificationData>("Data/Notification Data").defaultSystemNotify;
         GameObject newGO = Object.Instantiate(defaultOB, Notifications);
         newGO.GetComponent<SystemNotify>().SetAttributes(message, color);
