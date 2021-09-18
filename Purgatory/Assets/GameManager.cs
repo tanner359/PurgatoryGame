@@ -13,27 +13,23 @@ public class GameManager : MonoBehaviour
 
         GameObject GO = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         GO.name = "Player";
-    }
 
-    private void Start()
-    {
         LoadNonNativeNPC();
     }
-
 
     public void LoadNonNativeNPC()
     {
         NPCData[] data = SaveSystem.LoadAllNPCData(Laucher.GetCurrentSceneName());
-        Debug.Log(data.Length);
         CharacterDatabase database = Resources.Load<CharacterDatabase>("Data/Character Database");
         if (data == null) { return; }
 
         for(int i = 0; i < data.Length; i++)
         {
-            Debug.Log(data[0]);
-            if (GameObject.Find(data[i].name) == null)
+            if (GameObject.Find(data[i].name) == null && !data[i].isPossessed)
             {
-                Instantiate(database.GetCharacter(data[i].characterID), Vector3.zero, Quaternion.identity).name = data[i].name;
+                Vector3 pos = new Vector3(data[i].position[0], data[i].position[1], data[i].position[2]);
+                GameObject go = Instantiate(database.GetCharacter(data[i].characterID), pos, Quaternion.identity);
+                go.name = data[i].name;
             }
         }
     }

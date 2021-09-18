@@ -28,8 +28,9 @@ public class NPC : MonoBehaviour, ISavable, IControllable
 
     private void Awake()
     {
+        Debug.Log(gameObject.name);
         NPCData data = SaveSystem.LoadNPCData(Laucher.GetCurrentSceneName(), gameObject.name);
-        if(data != null)
+        if (data != null)
         {
             if (data.isPossessed) { Debug.Log(gameObject.name + " NPC Removed"); Destroy(gameObject); return; }
             transform.position = new Vector3(data.position[0], data.position[1], data.position[2]);
