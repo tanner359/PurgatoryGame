@@ -115,7 +115,7 @@ public class InteractionController : MonoBehaviour
     {  
         interactPrompt.SetActive(true);
         string[] joysticks = Input.GetJoystickNames();
-        InteractionData data = InteractionData.Get();
+        JoystickData data = JoystickData.Get();
         if (joysticks.Length > 0 && joysticks[0] != "")
         {
             switch(joysticks[0])
