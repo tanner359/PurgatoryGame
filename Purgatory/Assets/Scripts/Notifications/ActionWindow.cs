@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class ActionWindow : MonoBehaviour
 {
@@ -11,6 +12,12 @@ public class ActionWindow : MonoBehaviour
     public TMP_Text message;
     public TMP_Text buttonText;
     public ButtonFunction buttonFunction;
+    public GameObject ActionButton;
+
+    private void Start()
+    {
+        EventSystem.current.SetSelectedGameObject(ActionButton);
+    }
 
     public void SetAttributes(string message, string buttonText, ButtonFunction buttonFunction)
     {
@@ -27,5 +34,6 @@ public class ActionWindow : MonoBehaviour
     public void CloseNotification(float delay)
     {
         Destroy(gameObject, delay);
+        Player.instance.inputs.Player.Enable();
     }
 }

@@ -159,6 +159,7 @@ public class Player : MonoBehaviour, ISavable
     {
         if (Laucher.GetCurrentSceneName() == "Purgatory")
         {
+            inputs.Player.Disable();
             Travel_Living = LaunchLiving;
             Notification_System.Send_ActionWindow("Do you wish to travel to the Living Realm?", "Travel", Travel_Living);
             return;
@@ -166,6 +167,7 @@ public class Player : MonoBehaviour, ISavable
 
         if (revolver.bulletCount > 0)
         {
+            inputs.Player.Disable();
             Travel_Purgatory = LaunchPurgatory;
             Notification_System.Send_ActionWindow("Do you want to travel to Purgatory?\n\n\nWarning: This action consumes 1 Bullet.", "Travel", Travel_Purgatory);
             return;
