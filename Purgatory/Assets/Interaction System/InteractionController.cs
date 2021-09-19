@@ -17,7 +17,7 @@ public class InteractionController : MonoBehaviour
     public bool showRange = false;
     #endregion
     
-    private GameObject interactText;
+    private GameObject interactPrompt;
 
     private void OnEnable()
     {
@@ -65,12 +65,12 @@ public class InteractionController : MonoBehaviour
         {          
             canvas = Instantiate(data.defaultTextCanvas, Vector3.zero, Quaternion.identity);
             canvas.name = "Interactions";
-            interactText = Instantiate(data.defaultInteractionText, canvas.transform);
-            interactText.SetActive(false);
+            interactPrompt = Instantiate(data.defaultInteractionText, canvas.transform);
+            interactPrompt.SetActive(false);
             return;
         }
-        interactText = Instantiate(data.defaultInteractionText, canvas.transform);
-        interactText.SetActive(false);
+        interactPrompt = Instantiate(data.defaultInteractionText, canvas.transform);
+        interactPrompt.SetActive(false);
     }
     public void ScanInteractArea() // searching for items to interact with
     {
@@ -112,14 +112,30 @@ public class InteractionController : MonoBehaviour
 
     #region UI Functions
     public void DisplayInteractText(Vector3 textPos, string text)
-    {
-        interactText.SetActive(true);
-        interactText.GetComponent<TMPro.TextMeshPro>().text = "[" + inputs.Player.Interact.GetBindingDisplayString() + "]" + text;
-        interactText.transform.position = textPos;
+    {  
+        interactPrompt.SetActive(true);
+        string[] joysticks = Input.GetJoystickNames();
+        InteractionData data = InteractionData.Get();
+        if (joysticks.Length > 0 && joysticks[0] != "")
+        {
+            switch(joysticks[0])
+            {
+                case "Controller (Xbox One For Windows)":
+                    Joystick_UIElements elements = data.GetJoystickUI("Xbox");
+                    interactPrompt.GetComponent<InteractPrompt>().SetAttributes(elements.interact, text);
+                    break;
+
+            }
+        }
+        else
+        {
+            interactPrompt.GetComponent<InteractPrompt>().SetAttributes(null, "[" + inputs.Player.Interact.GetBindingDisplayString(0) + "]" + text);         
+        }
+        interactPrompt.transform.position = textPos;
     }
     public void HideText()
     {
-        interactText.SetActive(false);
+        interactPrompt.SetActive(false);
     }
     #endregion
     #endregion

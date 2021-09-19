@@ -246,6 +246,17 @@ public class @Player_Inputs : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""038f6237-f82a-40e5-9af6-b288b078bb16"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Xbox Controller"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""29c256df-15c7-4f0a-a58a-232906ca73c5"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
