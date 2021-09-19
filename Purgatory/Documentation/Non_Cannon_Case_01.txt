@@ -1,0 +1,17 @@
+Non Cannon Case:
+
+Purgatory: talk to ghost in distress for first quest
+
+Man Shot Dead
+
+Find Object left behind
+
+Road Block (Possess Officer to enter)
+
+Collect object inside house
+
+talk to beginning case NPC
+
+Use world event flags to unlock more cases
+
+go to office -> select case from collected
