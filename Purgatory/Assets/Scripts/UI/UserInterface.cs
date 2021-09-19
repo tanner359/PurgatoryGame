@@ -8,9 +8,10 @@ using UnityEngine.InputSystem;
  * 
  */
 
-
 public class UserInterface : MonoBehaviour
 {
+    public Canvas canvas;
+
     public GameObject pauseMenu;
 
     private Player_Inputs inputs;
@@ -24,6 +25,8 @@ public class UserInterface : MonoBehaviour
 
         inputs.Player.Pause.performed += Pause;
         inputs.Player.Pause.Enable();
+
+        canvas.worldCamera = Camera.main;
     }
 
     public void Pause(InputAction.CallbackContext context)

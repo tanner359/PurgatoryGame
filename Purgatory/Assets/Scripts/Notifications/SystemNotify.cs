@@ -36,6 +36,6 @@ public class SystemNotify : MonoBehaviour
     {
         lifeTime -= Time.deltaTime;
         if (lifeTime < 0) { Destroy(gameObject); }
-        message.color = message.color - new Color(0, 0, 0, message.color.a * (0.5f * Time.deltaTime));
+        message.color = message.color - new Color(0, 0, 0, message.color.a * (1f * Time.deltaTime));
     }
 }
