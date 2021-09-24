@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Notification Background
-  m_Shader: {fileID: -6465566751694194690, guid: 7b27353de19b4744194029bf11e7a616, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 2f12e16173ef8694e915d72f6eaee44e, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
