@@ -34,6 +34,9 @@ public class ActionWindow : MonoBehaviour
     public void CloseNotification(float delay)
     {
         Destroy(gameObject, delay);
-        Player.instance.inputs.Player.Enable();
+        if (Player.instance)
+        {
+            Player.instance.inputs.Player.Enable();
+        }  
     }
 }
