@@ -7,29 +7,19 @@ public class Revolver : MonoBehaviour
     private int lastBulletCount = 6;
     public int bulletCount = 6;
 
-    public Transform[] Chambers;  
+    public Animator animator;
+
+    private void Start()
+    {
+        animator.SetInteger("Num_Bullets", bulletCount);
+    }
 
     private void Update()
     {
         if(bulletCount != lastBulletCount)
         {
-            UpdateBullets();
+            animator.SetInteger("Num_Bullets", bulletCount);
             lastBulletCount = bulletCount;
-        }
-    }   
-
-    public void UpdateBullets()
-    {
-        for(int i = 0; i < (Chambers.Length); i++)
-        {
-            if (bulletCount + i < Chambers.Length)
-            {
-                Chambers[i].GetChild(0).gameObject.SetActive(false);
-            }
-            else
-            {
-                Chambers[i].GetChild(0).gameObject.SetActive(true);
-            }
         }
     }
 
