@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: SquareOutline
-  m_Shader: {fileID: -6465566751694194690, guid: 7b27353de19b4744194029bf11e7a616, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 2f12e16173ef8694e915d72f6eaee44e, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -24,7 +24,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 70cc196fdd0fae146ac7221994869faa, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -50,11 +50,11 @@ Material:
     m_Ints: []
     m_Floats:
     - Is_Active: 1
-    - Thickness: 0.1
+    - Thickness: 0.02
     - _EnableExternalAlpha: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _OutlineColor: {r: 502.3396, g: 502.3396, b: 502.3396, a: 1}
+    - _OutlineColor: {r: 1367.1202, g: 1367.1202, b: 1367.1202, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
