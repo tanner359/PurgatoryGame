@@ -38,7 +38,6 @@ public static class SaveSystem
     {
         string path = Path.Combine(Application.persistentDataPath, name);
         string[] dirs = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
-        Debug.Log(dirs.Length);
 
         for(int i = dirs.Length-1; i >= 0; i--)
         {

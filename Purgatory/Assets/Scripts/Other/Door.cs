@@ -5,11 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class Door : MonoBehaviour
 {
+    public static string lastOpened = "";
     public string levelToLoad;
-    
     public void OpenDoor()
     {
-        GameManager.SaveGame();
+        lastOpened = gameObject.name;
+        GameManager.SaveGame(false);
         Laucher.LoadScene(levelToLoad);
     }
 }
