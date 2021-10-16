@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 60
-    OrthographicSize: 5
+    OrthographicSize: 3.6
     NearClipPlane: 0.3
     FarClipPlane: 5
     Dutch: 0
@@ -353,7 +353,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Murder Investigation
+  m_text: No Case Selected
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -543,9 +543,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ad23eced10f1e84d8f28bb97c3491f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetCase: {fileID: 11400000, guid: d8d818bd78b0d3f4aae79813be91cfb7, type: 2}
+  _targetCase: {fileID: 0}
   caseTitle: {fileID: 2072219069}
   taskContainer: {fileID: 2488306588406734564}
+  data: {fileID: 0}
 --- !u!1 &5153263489372917204
 GameObject:
   m_ObjectHideFlags: 0

@@ -486,7 +486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8935045736829675918, guid: b6e7b5d4b8a0a9644bd7ac636a1e7442, type: 3}
       propertyPath: levelToLoad
-      value: Living Realm
+      value: Purgatory
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b6e7b5d4b8a0a9644bd7ac636a1e7442, type: 3}
