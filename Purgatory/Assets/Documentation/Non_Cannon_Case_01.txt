@@ -10,7 +10,7 @@ Road Block (Possess Officer to enter)
 
 Collect object inside house
 
-talk to beginning case NPC
+return to the ghost
 
 Use world event flags to unlock more cases
 

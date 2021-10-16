@@ -20,7 +20,7 @@ public class Menu : MonoBehaviour
     public void CreateNewSave()
     {
         SaveSystem.CreateNewSave(saveNameInputField.text);
-        Laucher.LoadScene("Living Realm");
+        Laucher.LoadScene("Purgatory");
     }
 
     public void LoadScene(string sceneName)

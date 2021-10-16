@@ -9,8 +9,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Notification_System.RunSetup(); // setup required pre-requisites.
-
+        Notification_System.RunSetup(); // setup required pre-requisites.     
         GameObject GO = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
         GO.name = "Player";
 
@@ -35,17 +34,31 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public static void SaveGame()
+    public static void SaveGame(bool show_notify)
     {
         GameObject[] sceneObjects = FindObjectsOfType<GameObject>();
-        for(int i = 0; i < sceneObjects.Length; i++)
+        for (int i = 0; i < sceneObjects.Length; i++)
         {
-            if(sceneObjects[i].TryGetComponent(out ISavable obj))
+            if (sceneObjects[i].TryGetComponent(out ISavable obj))
             {
                 obj.Save();
             }
         }
-
-        Notification_System.Send_SystemNotify("The game has been saved");
+        if (show_notify)
+        {
+            Notification_System.Send_SystemNotify("The game has been saved");
+        }
+    }
+    public static void SaveGame()
+    {
+        GameObject[] sceneObjects = FindObjectsOfType<GameObject>();
+        for (int i = 0; i < sceneObjects.Length; i++)
+        {
+            if (sceneObjects[i].TryGetComponent(out ISavable obj))
+            {
+                obj.Save();
+            }
+        }
+        Notification_System.Send_SystemNotify("The game has been saved");       
     }
 }

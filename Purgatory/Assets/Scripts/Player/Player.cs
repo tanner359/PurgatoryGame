@@ -64,14 +64,25 @@ public class Player : MonoBehaviour, ISavable
             return;
         }
 
-        Load();
+        Load();       
     }
     private void Start()
     {
-        PlayerData data = SaveSystem.LoadPlayerData();
-        if(data != null)
+        if (Door.lastOpened != "")
         {
-            currentCharacter.transform.position = new Vector2(data.position[0], data.position[1]);
+            Vector3 pos = GameObject.Find(Door.lastOpened).transform.position;
+            if (pos == null) { Debug.Log("Could not find matching door."); pos = Vector3.zero; }
+            currentCharacter.transform.position = pos;
+            Door.lastOpened = "";
+        }
+        else
+        {
+            PlayerData data = SaveSystem.LoadPlayerData();
+            if (data != null)
+            {
+                currentCharacter.transform.position = new Vector2(data.position[0], data.position[1]);
+            }
+            return;
         }
     }
 
@@ -134,7 +145,7 @@ public class Player : MonoBehaviour, ISavable
         }
         rb = currentCharacter.GetComponent<Rigidbody2D>();
         animator = currentCharacter.GetComponent<Animator>();
-        playerCam.Follow = currentCharacter.transform;    
+        playerCam.Follow = currentCharacter.transform;      
     }
 
     #region NOTIFICATIONS
@@ -188,17 +199,17 @@ public class Player : MonoBehaviour, ISavable
             Flip();
         }
 
-        if (xValue > deadZone || xValue < -deadZone || yValue > deadZone || yValue < -deadZone) 
+        if (xValue > deadZone || xValue < -deadZone || yValue > deadZone || yValue < -deadZone)
         {
             direction = context.ReadValue<Vector2>();
-            animator.SetBool("Walking", true);
+            if (animator){animator.SetBool("Walking", true);}
         }
         else
         {
             direction = Vector2.zero;
-            animator.SetBool("Walking", false);
+            if (animator) { animator.SetBool("Walking", false); }
         }
-        
+
     }
     private void Flip()
     {
@@ -222,5 +233,6 @@ public class Player : MonoBehaviour, ISavable
     private void Update()
     {
         rb.velocity = new Vector2((direction.x * speed), rb.velocity.y);
+        animator.SetFloat("Movement_Speed", Mathf.Abs(rb.velocity.x) / speed);
     }
 }
